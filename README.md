@@ -33,3 +33,5 @@ To set up and activate the environment for this project, follow these steps:
     ```sh
     poetry run uvicorn app.main:app --reload
     ```
+
+docker build -t hcc-extractor .
