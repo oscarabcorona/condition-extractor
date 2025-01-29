@@ -1,8 +1,11 @@
+import logging
 from os import getenv
 from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import CommaSeparatedListOutputParser
+
+logger = logging.getLogger(__name__)
 
 class AIService:
     def __init__(self):
@@ -24,15 +27,32 @@ class AIService:
         
         self.output_parser = CommaSeparatedListOutputParser()
         self.prompt = PromptTemplate(
-            template="""Extract all medical conditions related to HCC from the following text. 
+            template="""Analyze the following clinical progress note and extract all medical conditions, 
+            focusing specifically on the Assessment/Plan section.
             Return them as a comma-separated list. If no conditions are found, return an empty list.
             
-            Text: {text}
+            Clinical Note: {text}
             
-            Conditions:""",
+            Medical Conditions:""",
             input_variables=["text"]
         )
 
     async def extract_conditions(self, text: str) -> list[str]:
-        chain = self.prompt | self.llm | self.output_parser
-        return await chain.ainvoke({"text": text})
+        if not text or not text.strip():
+            logger.warning("Empty or whitespace-only text provided")
+            return []
+
+        try:
+            logger.debug(f"Processing text of length: {len(text)}")
+            chain = self.prompt | self.llm | self.output_parser
+            conditions = await chain.ainvoke({"text": text})
+            
+            if not conditions:
+                logger.info("No conditions extracted from text")
+                return []
+                
+            logger.info(f"Extracted {len(conditions)} conditions: {conditions}")
+            return [cond.strip() for cond in conditions if cond.strip()]
+        except Exception as e:
+            logger.error(f"Error extracting conditions: {str(e)}", exc_info=True)
+            raise
