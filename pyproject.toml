@@ -17,6 +17,7 @@ uvicorn = "^0.34.0"
 langchain-google-genai = "^2.0.9"
 python-dotenv = "^1.0.1"
 pandas = "^2.2.3"
+langgraph = "^0.2.68"
 
 [build-system]
 requires = ["poetry-core"]

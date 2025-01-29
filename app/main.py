@@ -36,12 +36,13 @@ async def extract_conditions(request: ExtractionRequest):
         result = hcc_service.validate_conditions(conditions)
         return ExtractionResponse(**result)
     except ValueError as e:
+        logger.warning(f"Validation error: {str(e)}")
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
-        logger.error(f"Error processing request: {str(e)}", exc_info=True)
+        logger.error(f"Error in extraction pipeline: {str(e)}", exc_info=True)
         raise HTTPException(
             status_code=500,
-            detail="An error occurred while processing your request. Please try again later."
+            detail="An error occurred while processing your request"
         )
 
 @app.get("/health")
