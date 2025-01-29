@@ -5,3 +5,6 @@
 .DS_Store
 Thumbs.db
 *.txt
+google_credentials.json
+__pycache__
+.env

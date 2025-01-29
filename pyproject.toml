@@ -1,17 +1,22 @@
-[project]
+[tool.poetry]
 name = "condition-extractor"
 version = "0.1.0"
 description = "AI pipeline for extracting HCC conditions"
-authors = [
-    {name = "Oscar Corona oabc4004@gmail.com"}
-]
-license = {text = "MIT"}
+authors = ["Oscar Corona <oabc4004@gmail.com>"]
 readme = "README.md"
-requires-python = ">=3.13"
-dependencies = [
-]
+packages = [{include = "app"}]
 
+[tool.poetry.dependencies]
+python = ">=3.13,<4.0"
+langchain-google-vertexai = "^2.0.12"
+google-cloud-aiplatform = "^1.38.0"
+langchain-core = ">=0.3.31,<0.4"
+google-cloud-storage = "^2.0.0"
+fastapi = "^0.115.7"
+uvicorn = "^0.34.0"
+langchain-google-genai = "^2.0.9"
+python-dotenv = "^1.0.1"
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
+requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
